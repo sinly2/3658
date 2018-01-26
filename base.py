@@ -129,6 +129,38 @@ class Session(object):
         print result.text
         print result.json()["msg1"]
 
+    def day_sign(self):
+        """
+
+        :return:
+        1000 签到成功
+        1001 需要登陆
+        1002 今日已签到
+        1003 未知错误
+        """
+        params = {}
+        url = "https://www.3658mall.com/day_sign.php?act=just_sign"
+        result = self.session.post(url,data=params,headers=self.headers,timeout=self.timeout)
+        if result.text.find(u"立即注册") != -1 and result.text.find(u"使用合作网站账号登录") != -1:
+            print "Needs login..."
+            return "1001"
+        elif result.json()["error"] == 1 and result.json()["content"] == u"今日已签到，明日再来吧！":
+            print u"今日已签到！"
+            return "1002"
+        elif result.json()["error"] == 1:
+            print result.json()["content"]
+            return "1003"
+        url = "https://www.3658mall.com/day_sign.php"
+        result = self.session.get(url, headers=self.headers, timeout=self.timeout)
+        url = "https://www.3658mall.com/day_sign.php?act=sign"
+        result = self.session.post(url, data=params, headers=self.headers, timeout=self.timeout)
+        if result.json()["code"] == 99:
+            print "Sign success!"
+            return "1000"
+        else:
+            print result.json()["content"]
+            return "1003"
+
 if __name__ == "__main__":
     pass
 
