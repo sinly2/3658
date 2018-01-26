@@ -53,7 +53,7 @@ class WithdrawHandler(threading.Thread):
 
     def run(self):
         while True:
-            code = self.session.withdraw(960, 117166)
+            code = self.session.withdraw(200, 117166)
             if code == "1000" :
                 print 'Withdraw OK!'
                 break
@@ -72,6 +72,9 @@ class WithdrawHandler(threading.Thread):
                 break
             elif code == "1006":
                 print u"个人周提现额度限制"
+                break
+            elif code == "1008":
+                print u"支付密码错误，请重新输入"
                 break
             else:
                 print "Unkown mistake code[%s]..." % (code)

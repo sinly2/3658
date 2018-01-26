@@ -81,8 +81,9 @@ class Session(object):
         1005 七日提现限制
         1006 个人周提现限制
         1007 提现金额不是20的整数倍
+        1008 支付密码错误
         """
-        params = {"amount":amount,"raply_bank":bank_id,"surplus":surplus,"act":act,"password":self.trade_password}
+        params = {"amount":amount,"raply_bank":bank_id,"surplus_type":surplus,"act":act,"p_password":self.trade_password}
         try:
             result = self.session.post(self.withdraw_url, data=params, headers=self.headers, timeout=self.timeout)
             #print result.status_code
@@ -92,7 +93,7 @@ class Session(object):
                 print u'当日额度已用完！'
                 return "1001"
             if result.status_code == 200:
-                if result.text.find(u"提现成功") != -1:
+                if result.text.find(u"提交成功，银行处理中") != -1:
                     print 'withdraw OK!'
                     return "1000"
                 elif result.text.find(u"立即注册") != -1 and result.text.find(u"使用合作网站账号登录") != -1:
@@ -107,6 +108,9 @@ class Session(object):
                 elif result.text.find(u"提现失败，提现金额必须是20的整数倍") != -1:
                     print 'Amount%20...'
                     return "1007"
+                elif result.text.find(u"支付密码错误，请重新输入") != -1:
+                    print u'支付密码错误，请重新输入'
+                    return "1008"
                 else:
                     print result.text
                     return "1003"
