@@ -83,7 +83,7 @@ class Session(object):
         1007 提现金额不是20的整数倍
         1008 支付密码错误
         """
-        params = {"amount":amount,"raply_bank":bank_id,"surplus_type":surplus,"act":act,"p_password":self.trade_password}
+        params = {"amount":amount,"raply_bank":bank_id,"surplus_type":surplus,"act":act,"p_password":self.trade_password,"raply_type":0}
         try:
             result = self.session.post(self.withdraw_url, data=params, headers=self.headers, timeout=self.timeout)
             #print result.status_code
