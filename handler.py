@@ -73,6 +73,8 @@ class WithdrawHandler(threading.Thread):
                 break
             elif code == "1008":
                 break
+            elif code == "1009":
+                break
             else:
                 break
 

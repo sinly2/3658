@@ -84,6 +84,7 @@ class Session(object):
         1006 个人周提现限制
         1007 提现金额不是20的整数倍
         1008 支付密码错误
+        1009 未参与红筹，无提现资格
         """
         params = {"amount": amount, "raply_bank": bank_id, "surplus_type": surplus, "act": act,
                   "p_password": self.trade_password, "raply_type": 0}
@@ -114,6 +115,9 @@ class Session(object):
                 elif u"支付密码错误，请重新输入" in result.text:
                     print '%s 支付密码错误，请重新输入' % (self.username)
                     return "1008"
+                elif u"您暂时没有提现资格" in result.text:
+                    print '%s 您暂时没有提现资格' % (self.username)
+                    return "1009"
                 else:
                     print result.text
                     print '%s unkown mistakes...' % (self.username)
