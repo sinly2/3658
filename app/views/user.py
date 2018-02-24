@@ -10,6 +10,8 @@ from . import main
 from app import db
 from ..models.user import User
 from ..forms.user import RegisterForm
+from flask_login import login_user,logout_user,current_user
+from ..utils.user import require_login, require_vip
 
 
 @main.route('/test')
@@ -23,6 +25,11 @@ def test():
     if user and user.check_password(password):
         return "hahaha"
     return "ok"
+
+@main.route("/test2")
+@require_login
+def test2():
+    return "xici.net"
 
 
 @main.route("/register",methods=['POST'])
@@ -38,4 +45,22 @@ def register():
         return u"用户名已注册..."
     except Exception as e:
         print e
+    return "ok"
+
+
+@main.route("/login")
+def login():
+    username = request.args.get("username")
+    password = request.args.get("password")
+    user = User.query.filter_by(username=username).first()
+    if user and user.check_password(password):
+        login_user(user,remember=False)
+        print current_user.id
+        return "hahaha"
+    return "ok"
+
+@main.route("/logout")
+@require_login
+def logout():
+    logout_user()
     return "ok"

@@ -13,7 +13,9 @@ Created on Feb 11, 2018
 """
 import json
 import redis,sqlite3,time
+import traceback
 from pymongo import MongoClient
+from functools import wraps
 
 
 global CONFIG
@@ -56,6 +58,13 @@ def get_time(delay=None):
     else:
         return time.strftime("%Y-%m-%d %H:%M:%S",time.localtime(time.time()))
 
+
+def stack_info(func):
+    @wraps(func)
+    def new_func(*args, **kwargs):
+        #print traceback.print_stack()
+        return func(*args, **kwargs)
+    return new_func
 
 if __name__ == "__main__":
     print get_time(100)

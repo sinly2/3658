@@ -6,9 +6,9 @@ Created on Feb 23, 2018
 """
 from flask import *
 from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_login import LoginManager, user_logged_in
 from flask_bootstrap import Bootstrap
-
+from utils.user import track_login
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 login_manager = LoginManager()
@@ -25,4 +25,9 @@ def create_app():
     db.init_app(app)
     bootstrap.init_app(app)
     login_manager.init_app(app)
+    user_logged_in.connect(track_login, app)
+
+    # @user_logged_in.connect_via(app)
+    # def record(sender, **extra):
+    #     print "====================================="
     return app
