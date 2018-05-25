@@ -79,5 +79,23 @@ class WithdrawHandler(threading.Thread):
                 break
 
 
+class GetWithdrawDayHandler(threading.Thread):
+    def __init__(self, threadName, username, password, trade_password="123456"):
+        super(GetWithdrawDayHandler, self).__init__(name=threadName)
+        self.session = Session(username, password, trade_password)
+        if not self.session.set_cookies():
+            print 'Cookie set failed...'
+
+    def run(self):
+        count = 0
+        while count < 10:
+            code = self.session.get_withdraw_day()
+            if code == "1000":
+                break
+            else:
+                time.sleep(1)
+                count = count + 1
+                continue
+
 if __name__ == "__main__":
     pass

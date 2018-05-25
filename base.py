@@ -193,6 +193,27 @@ class Session(object):
             print result.json()["content"]
             return "1003"
 
+    def get_withdraw_day(self):
+        """
+
+        :return:
+        1000 获得提现资格
+        1001 未获得提现资格
+        1003 未知错误
+        """
+
+        url = "https://www.3658mall.com/member.html"
+        result = self.session.get(url)
+        #with open("123.html","wb") as fp:
+        #   fp.write(result.text.encode("utf8"))
+        if u"恭喜您获得提现资格" in result.text:
+            return "1000"
+        elif u"您暂无提现资格" in result.text:
+            return  "1001"
+        else:
+            return "1003"
+
+
 
 if __name__ == "__main__":
     pass
