@@ -89,6 +89,9 @@ class GetWithdrawDayHandler(threading.Thread):
     def run(self):
         count = 0
         while count < 10:
+            if not self.session.set_cookies():
+                time.sleep(1)
+                continue
             code = self.session.get_withdraw_day()
             if code == "1000":
                 break
